@@ -129,7 +129,7 @@ export const Form: React.FC = () => {
         <div>
           <label className="block text-sm font-medium text-yellow-300" htmlFor="message">Message</label>
           <textarea
-            className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 mt-1 text-sm text-slate-900 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             name="message"
             id="message"
             value={formData.message}
@@ -138,10 +138,7 @@ export const Form: React.FC = () => {
             required
           />
         </div>
-        <ReCAPTCHA
-          sitekey="6LcHxB8qAAAAAPF5lR6u50EmMp-2af2DHpaOgZ04"
-          onChange={handleRecaptchaChange}
-        />
+        
         <button
           type="submit"
           className="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
