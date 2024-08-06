@@ -96,7 +96,7 @@ const Form: React.FC = () => {
         <div>
           <label className="block text-sm font-medium text-yellow-300" htmlFor="fullName">Full Name</label>
           <input
-            className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 mt-1 text-sm border text-slate-950 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             type="text"
             name="fullName"
             id="fullName"
@@ -108,7 +108,7 @@ const Form: React.FC = () => {
         <div>
           <label className="block text-sm font-medium text-yellow-300" htmlFor="email">Email</label>
           <input
-            className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 mt-1 text-sm border text-slate-950 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             type="email"
             name="email"
             id="email"
@@ -120,7 +120,7 @@ const Form: React.FC = () => {
         <div>
           <label className="block text-sm font-medium text-yellow-300" htmlFor="phoneNumber">Phone Number</label>
           <input
-            className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 mt-1 text-sm border text-slate-950 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             type="tel"
             name="phoneNumber"
             id="phoneNumber"
