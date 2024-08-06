@@ -90,8 +90,8 @@ const Form: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-800">
-      <form className="w-full max-w-md p-8 space-y-6 bg-slate-800 rounded-lg shadow-md" onSubmit={handleSubmit}>
+    <div className="flex items-center justify-center min-h-screen">
+      <form className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold text-center">Contact Us</h2>
         <div>
           <label className="block text-sm font-medium text-yellow-300" htmlFor="fullName">Full Name</label>
@@ -142,7 +142,7 @@ const Form: React.FC = () => {
           />
         </div>
         <ReCAPTCHA
-          sitekey="YOUR_RECAPTCHA_SITE_KEY"
+          sitekey="6LcHxB8qAAAAAPF5lR6u50EmMp-2af2DHpaOgZ04"
           onChange={handleRecaptchaChange}
         />
         <button
