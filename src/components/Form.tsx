@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 interface FormData {
   fullName: string;
@@ -10,14 +10,14 @@ interface FormData {
   message: string;
 }
 
-const Form: React.FC = () => {
+export const Form: React.FC = () => {
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     email: '',
     phoneNumber: '',
     message: '',
   });
-  const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -28,16 +28,8 @@ const Form: React.FC = () => {
     });
   };
 
-  const handleRecaptchaChange = (value: string | null) => {
-    setRecaptchaValue(value);
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!recaptchaValue) {
-      alert('Please complete the reCAPTCHA');
-      return;
-    }
 
     // Basic validation to ensure all fields are filled
     const { fullName, email, phoneNumber, message } = formData;
@@ -46,17 +38,24 @@ const Form: React.FC = () => {
       return;
     }
 
+    if (!executeRecaptcha) {
+      alert('Recaptcha not yet available');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('contact.a-eskandarzadeh.eu/submit', {
+      const recaptchaToken = await executeRecaptcha('submit');
+
+      const response = await fetch('https://your-api-endpoint.com/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           ...formData,
-          recaptcha: recaptchaValue,
+          recaptchaToken,
         }),
       });
 
@@ -68,14 +67,13 @@ const Form: React.FC = () => {
       const result = await response.json();
       console.log('Success:', result);
       alert('Form submitted successfully');
-      
+      // Optionally, clear the form here
       setFormData({
         fullName: '',
         email: '',
         phoneNumber: '',
         message: '',
       });
-      setRecaptchaValue(null);
     } catch (error) {
       if (error instanceof Error) {
         console.error('Error:', error.message);
@@ -88,7 +86,6 @@ const Form: React.FC = () => {
       setIsSubmitting(false);
     }
   };
-
   return (
     <div className="flex items-center justify-center min-h-screen">
       <form className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
