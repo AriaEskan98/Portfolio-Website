@@ -48,7 +48,7 @@ export const Form: React.FC = () => {
     try {
       const recaptchaToken = await executeRecaptcha('submit');
 
-      const response = await fetch('https://your-api-endpoint.com/submit', {
+      const response = await fetch('https://contacts.a-eskandarzadeh.eu/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
