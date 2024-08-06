@@ -49,7 +49,7 @@ const Form: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('https://your-api-endpoint.com/submit', {
+      const response = await fetch('contact.a-eskandarzadeh.eu/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ const Form: React.FC = () => {
       const result = await response.json();
       console.log('Success:', result);
       alert('Form submitted successfully');
-      // Optionally, clear the form here
+      
       setFormData({
         fullName: '',
         email: '',
