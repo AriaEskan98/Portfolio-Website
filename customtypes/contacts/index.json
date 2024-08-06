@@ -1,16 +1,17 @@
 {
   "format": "page",
-  "id": "page",
-  "label": "Page",
-  "repeatable": true,
+  "id": "contacts",
+  "label": "Contacts",
+  "repeatable": false,
   "status": true,
   "json": {
     "Main": {
-      "uid": {
+      "title": {
+        "type": "Text",
         "config": {
-          "label": "UID"
-        },
-        "type": "UID"
+          "label": "Title",
+          "placeholder": ""
+        }
       },
       "slices": {
         "type": "Slices",
@@ -18,18 +19,6 @@
         "config": {
           "choices": {
             "contact_form": {
-              "type": "SharedSlice"
-            },
-            "experience": {
-              "type": "SharedSlice"
-            },
-            "content_index": {
-              "type": "SharedSlice"
-            },
-            "tech_list": {
-              "type": "SharedSlice"
-            },
-            "about": {
               "type": "SharedSlice"
             }
           }
