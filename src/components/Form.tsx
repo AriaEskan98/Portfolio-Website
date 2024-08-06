@@ -1,87 +1,51 @@
-"use client";
-
+"use client"
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import ReCAPTCHA from 'react-google-recaptcha';
 
-interface FormData {
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  message: string;
-}
-
-export const Form: React.FC = () => {
-  const { executeRecaptcha } = useGoogleReCaptcha();
-  const [formData, setFormData] = useState<FormData>({
+const Form: React.FC = () => {
+  const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     phoneNumber: '',
     message: '',
   });
+  const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Handle changes in input fields
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Basic validation to ensure all fields are filled
-    const { fullName, email, phoneNumber, message } = formData;
-    if (!fullName || !email || !phoneNumber || !message) {
-      alert('All fields are required');
-      return;
-    }
-
-    if (!executeRecaptcha) {
-      alert('Recaptcha not yet available');
+    if (!recaptchaValue) {
+      alert('Please complete the reCAPTCHA');
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const recaptchaToken = await executeRecaptcha('submit');
-
-      const response = await fetch('https://contacts.a-eskandarzadeh.eu/submit', {
+      const response = await fetch('contacts.a-eskandarzadeh.eu', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          recaptchaToken,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, recaptchaToken: recaptchaValue }),
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Network response was not ok: ${response.status} ${response.statusText} - ${errorText}`);
-      }
-
-      const result = await response.json();
-      console.log('Success:', result);
-      alert('Form submitted successfully');
-      // Optionally, clear the form here
-      setFormData({
-        fullName: '',
-        email: '',
-        phoneNumber: '',
-        message: '',
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error:', error.message);
-        alert(`There was an error submitting the form: ${error.message}`);
+      if (response.ok) {
+        alert('Form submitted successfully');
+        setFormData({ fullName: '', email: '', phoneNumber: '', message: '' });
+        setRecaptchaValue(null);
       } else {
-        console.error('Unknown error:', error);
-        alert('An unknown error occurred.');
+        alert('Form submission failed');
       }
+    } catch (error) {
+      console.error('Error during form submission:', error);
+      alert('An error occurred');
     } finally {
       setIsSubmitting(false);
     }
@@ -129,7 +93,7 @@ export const Form: React.FC = () => {
         <div>
           <label className="block text-sm font-medium text-yellow-300" htmlFor="message">Message</label>
           <textarea
-            className="w-full px-4 py-2 mt-1 text-sm text-slate-900 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 mt-1 text-sm text-slate-950 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             name="message"
             id="message"
             value={formData.message}
@@ -138,7 +102,10 @@ export const Form: React.FC = () => {
             required
           />
         </div>
-        
+        <ReCAPTCHA
+          sitekey="6LcPmSAqAAAAABLw-l8odVaUY30_qZKlHyarTqJ7"
+          onChange={(value) => setRecaptchaValue(value)}
+        />
         <button
           type="submit"
           className="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
