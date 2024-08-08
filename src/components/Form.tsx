@@ -32,29 +32,21 @@ const Form: React.FC = () => {
     setIsSubmitting(true);
   
     try {
-      // Construct the SOAP envelope
-      const soapEnvelope = `
-        <?xml version="1.0" encoding="utf-8"?>
-        <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-          <soap:Body>
-            <SendMail xmlns="http://tempuri.org/">
-              <FullName>${formData.fullName}</FullName>
-              <Email>${formData.email}</Email>
-              <PhoneNumber>${formData.phoneNumber}</PhoneNumber>
-              <Message>${formData.message}</Message>
-              <RecaptchaToken>${recaptchaValue}</RecaptchaToken>
-            </SendMail>
-          </soap:Body>
-        </soap:Envelope>
-      `;
+      // Prepare the JSON data
+      const jsonData = {
+        fullName: formData.fullName,
+        email: formData.email,
+        phoneNumber: formData.phoneNumber,
+        message: formData.message,
+        recaptchaToken: recaptchaValue,
+      };
   
-      const response = await fetch('https://contact.a-eskandarzadeh.eu/index.asmx', {
+      const response = await fetch('https://contact.a-eskandarzadeh.eu/index.asmx/SendMail', {
         method: 'POST',
         headers: {
           'Content-Type': 'text/xml; charset=utf-8',
-          'SOAPAction': 'http://tempuri.org/SendMail',  // Required for SOAP 1.1
         },
-        body: soapEnvelope,
+        body:JSON.stringify(jsonData),
       });
   
       if (response.ok) {
