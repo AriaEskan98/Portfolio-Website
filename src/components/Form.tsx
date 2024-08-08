@@ -16,6 +16,7 @@ const Form: React.FC = () => {
   });
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   
   const recaptchaRef = useRef<ReCAPTCHAWithReset | null>(null);
@@ -64,12 +65,15 @@ const Form: React.FC = () => {
         setFormData({ fullName: '', email: '', phoneNumber: '', message: '' });
         setRecaptchaValue(null);
         recaptchaRef.current?.reset?.();
+        setIsSuccess(true);
       } else {
         alert('Form submission failed');
+        setIsSuccess(false);
       }
     } catch (error) {
       console.error('Error during form submission:', error);
       alert('An error occurred');
+      setIsSuccess(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -78,7 +82,13 @@ const Form: React.FC = () => {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <form className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
-        <h2 className="text-2xl font-bold text-center">Contact Us</h2>
+        <h2 className="text-2xl font-bold text-center">Contact Me</h2>
+
+        {isSuccess && (
+          <div className="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
+            Your message has been successfully submitted!
+          </div>
+        )}
         <div>
           <label className="block text-sm font-medium text-yellow-300" htmlFor="fullName">Full Name</label>
           <input
