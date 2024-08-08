@@ -21,23 +21,46 @@ const Form: React.FC = () => {
   // Handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+  
+    if (isSubmitting) return;  // Prevent multiple submissions
+  
     if (!recaptchaValue) {
       alert('Please complete the reCAPTCHA');
       return;
     }
-
+  
     setIsSubmitting(true);
-
+  
     try {
-      const response = await fetch('contacts.a-eskandarzadeh.eu', {
+      // Construct the SOAP envelope
+      const soapEnvelope = `
+        <?xml version="1.0" encoding="utf-8"?>
+        <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+          <soap:Body>
+            <SendMail xmlns="http://tempuri.org/">
+              <FullName>${formData.fullName}</FullName>
+              <Email>${formData.email}</Email>
+              <PhoneNumber>${formData.phoneNumber}</PhoneNumber>
+              <Message>${formData.message}</Message>
+              <RecaptchaToken>${recaptchaValue}</RecaptchaToken>
+            </SendMail>
+          </soap:Body>
+        </soap:Envelope>
+      `;
+  
+      const response = await fetch('https://contact.a-eskandarzadeh.eu/index.asmx', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, recaptchaToken: recaptchaValue }),
+        headers: {
+          'Content-Type': 'text/xml; charset=utf-8',
+          'SOAPAction': 'http://tempuri.org/SendMail',  // Required for SOAP 1.1
+        },
+        body: soapEnvelope,
       });
-
+  
       if (response.ok) {
-        alert('Form submitted successfully');
+        const responseText = await response.text();
+        // Extract and display the response (e.g., "Hello World" or the actual result)
+        alert(`API Response: ${responseText}`);
         setFormData({ fullName: '', email: '', phoneNumber: '', message: '' });
         setRecaptchaValue(null);
       } else {
@@ -50,6 +73,7 @@ const Form: React.FC = () => {
       setIsSubmitting(false);
     }
   };
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <form className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
