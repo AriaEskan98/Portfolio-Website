@@ -1,7 +1,11 @@
 "use client"
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, {useRef, useState, ChangeEvent, FormEvent } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
+
+type ReCAPTCHAWithReset = ReCAPTCHA & {
+  reset: () => void;
+};
 const siteKey = process.env.NEXT_PUBLIC_SITE_KEY;
 const Form: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +16,9 @@ const Form: React.FC = () => {
   });
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  
+  const recaptchaRef = useRef<ReCAPTCHAWithReset | null>(null);
 
   // Handle changes in input fields
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -56,6 +63,7 @@ const Form: React.FC = () => {
         alert(`API Response: ${responseText}`);
         setFormData({ fullName: '', email: '', phoneNumber: '', message: '' });
         setRecaptchaValue(null);
+        recaptchaRef.current?.reset?.();
       } else {
         alert('Form submission failed');
       }
