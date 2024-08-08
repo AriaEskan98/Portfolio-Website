@@ -2,6 +2,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
+const siteKey = process.env.NEXT_PUBLIC_SITE_KEY;
 const Form: React.FC = () => {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -119,7 +120,7 @@ const Form: React.FC = () => {
           />
         </div>
         <ReCAPTCHA
-          sitekey="6LcPmSAqAAAAABLw-l8odVaUY30_qZKlHyarTqJ7"
+          sitekey={siteKey || ''}
           onChange={(value) => setRecaptchaValue(value)}
         />
         <button
