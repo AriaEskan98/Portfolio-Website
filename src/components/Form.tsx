@@ -61,7 +61,7 @@ const Form: React.FC = () => {
       if (response.ok) {
         const responseText = await response.text();
         // Extract and display the response (e.g., "Hello World" or the actual result)
-        alert(`API Response: ${responseText}`);
+       
         setFormData({ fullName: '', email: '', phoneNumber: '', message: '' });
         setRecaptchaValue(null);
         recaptchaRef.current?.reset?.();
