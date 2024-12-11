@@ -32,6 +32,12 @@ export default function ContentList({
 
   const urlPrefix = contentType === "Blog" ? "/blog" : "/project";
 
+  const sortedItems = [...items].sort((a, b) => {
+    const dateA = a.data.date ? new Date(a.data.date) : new Date(0); // Fallback to epoch for null dates
+    const dateB = b.data.date ? new Date(b.data.date) : new Date(0);
+    return dateB.getTime() - dateA.getTime(); // Newest first
+  });
+
   useEffect(() => {
     // Animate list-items in with a stagger
     let ctx = gsap.context(() => {
