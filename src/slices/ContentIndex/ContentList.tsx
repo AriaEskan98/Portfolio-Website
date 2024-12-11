@@ -117,7 +117,7 @@ export default function ContentList({
     setCurrentItem(null);
   };
 
-  const contentImages = items.map((item) => {
+  const contentImages = sortedItems.map((item) => {
     const image = isFilled.image(item.data.hover_image)
       ? item.data.hover_image
       : fallbackItemImage;
