@@ -145,7 +145,7 @@ export default function ContentList({
         className="grid border-b border-b-slate-100"
         onMouseLeave={onMouseLeave}
       >
-        {items.map((post, index) => (
+        {sortedItems.map((post, index) => (
           <li
             key={index}
             onMouseEnter={() => onMouseEnter(index)}
