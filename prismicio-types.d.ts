@@ -309,7 +309,10 @@ interface PageDocumentData {
 export type PageDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<PageDocumentData>, "page", Lang>;
 
-type ProjectDocumentDataSlicesSlice = ImageBlockSlice | TextBlockSlice;
+type ProjectDocumentDataSlicesSlice =
+  | ButtonLinkSlice
+  | ImageBlockSlice
+  | TextBlockSlice;
 
 /**
  * Content for Project documents
@@ -639,6 +642,61 @@ type AboutSliceVariation = AboutSliceDefault;
  * - **Documentation**: https://prismic.io/docs/slice
  */
 export type AboutSlice = prismic.SharedSlice<"about", AboutSliceVariation>;
+
+/**
+ * Primary content in *ButtonLink → Default → Primary*
+ */
+export interface ButtonLinkSliceDefaultPrimary {
+  /**
+   * Project Link field in *ButtonLink → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: button_link.default.primary.project_link
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  project_link: prismic.LinkField;
+
+  /**
+   * Button Text field in *ButtonLink → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: button_link.default.primary.button_text
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  button_text: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for ButtonLink Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type ButtonLinkSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<ButtonLinkSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *ButtonLink*
+ */
+type ButtonLinkSliceVariation = ButtonLinkSliceDefault;
+
+/**
+ * ButtonLink Shared Slice
+ *
+ * - **API ID**: `button_link`
+ * - **Description**: ButtonLink
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type ButtonLinkSlice = prismic.SharedSlice<
+  "button_link",
+  ButtonLinkSliceVariation
+>;
 
 /**
  * Primary content in *ContactForm → Default → Primary*
@@ -1137,6 +1195,10 @@ declare module "@prismicio/client" {
       AboutSliceDefaultPrimary,
       AboutSliceVariation,
       AboutSliceDefault,
+      ButtonLinkSlice,
+      ButtonLinkSliceDefaultPrimary,
+      ButtonLinkSliceVariation,
+      ButtonLinkSliceDefault,
       ContactFormSlice,
       ContactFormSliceDefaultPrimary,
       ContactFormSliceVariation,
