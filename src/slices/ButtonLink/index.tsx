@@ -12,7 +12,7 @@ export type ButtonLinkProps = SliceComponentProps<Content.ButtonLinkSlice>;
  */
 const ButtonLink = ({ slice }: ButtonLinkProps): JSX.Element => {
   return (
-    <div className="inline-flex gap-4">
+    <div className="inline-flex gap-4 mr-3">
       <Button
         linkField={slice.primary.project_link}
         label={slice.primary.button_text}
